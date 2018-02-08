@@ -1,5 +1,6 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="../../baselist.jsp"%>
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -14,11 +15,21 @@
 <div id="innerMenubar">
   <div id="navMenubar">
 <ul>
+<shiro:hasPermission name="角色管理_查看">
 <li id="view"><a href="#" onclick="formSubmit('roleAction_toview','_self');this.blur();">查看</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="角色管理_新增">
 <li id="new"><a href="#" onclick="formSubmit('roleAction_tocreate','_self');this.blur();">新增</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="角色管理_修改">
 <li id="update"><a href="#" onclick="formSubmit('roleAction_toupdate','_self');this.blur();">修改</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="角色管理_删除">
 <li id="delete"><a href="#" onclick="formSubmit('roleAction_delete','_self');this.blur();">删除</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="角色管理_权限">
 <li id="new"><a href="#" onclick="formSubmit('roleAction_tomodule','_self');this.blur();" title="分配权限">权限</a></li>
+</shiro:hasPermission>
 </ul>
   </div>
 </div>

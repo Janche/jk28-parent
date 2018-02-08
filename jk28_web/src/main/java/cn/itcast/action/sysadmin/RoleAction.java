@@ -1,5 +1,6 @@
 package cn.itcast.action.sysadmin;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -208,6 +209,7 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 		sb.append("[");
 		int count = list.size();
 		for (Module module : list) {
+			// 获取到此模块具有的操作权限
 			Set<Dictionary> dicts = module.getDicts();
 			StringBuilder str = new StringBuilder();
 			for (Dictionary dict : dicts) {
@@ -215,6 +217,7 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 			}
 			String operates = str.toString();
 			count--;
+			
 			sb.append("{\"id\":\"").append(module.getId());
 			sb.append("\",\"pId\":\"").append(module.getParentId());
 			sb.append("\",\"name\":\"").append(module.getName());
@@ -226,8 +229,36 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 			}
 
 			if (module.getLayerNum() > 1) {
+				
+				sb.append("\",\"children\":[");
+				
+				if ("用户管理".equals(module.getName())) {
+					sb.append("{\"id\":\"").append("operatef");
+					sb.append("\",\"pId\":\"").append(module.getId());
+					sb.append("\",\"name\":\"").append("角色");
+					sb.append("\",\"checked\":\"");
+					if (operates.contains("角色")) {
+						sb.append("true");
+					} else {
+						sb.append("false");
+					}
+					sb.append("\"}");
+					sb.append(",");
 
-				sb.append("\",children:[");
+				} else if ("角色管理".equals(module.getName())) {
+					sb.append("{\"id\":\"").append("operatee");
+					sb.append("\",\"pId\":\"").append(module.getId());
+					sb.append("\",\"name\":\"").append("权限");
+					sb.append("\",\"checked\":\"");
+					if (operates.contains("权限")) {
+						sb.append("true");
+					} else {
+						sb.append("false");
+					}
+					sb.append("\"}");
+					sb.append(",");
+				}
+				
 				sb.append("{\"id\":\"").append("operated");
 				sb.append("\",\"pId\":\"").append(module.getId());
 				sb.append("\",\"name\":\"").append("查看");
@@ -239,7 +270,7 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 				}
 				sb.append("\"}");
 				sb.append(",");
-
+				
 				sb.append("{\"id\":\"").append("operatea");
 				sb.append("\",\"pId\":\"").append(module.getId());
 				sb.append("\",\"name\":\"").append("新增");
@@ -274,19 +305,7 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 					sb.append("false");
 				}
 				sb.append("\"}");
-				sb.append(",");
-
-				sb.append("{\"id\":\"").append("operatee");
-				sb.append("\",\"pId\":\"").append(module.getId());
-				sb.append("\",\"name\":\"").append("权限");
-				sb.append("\",\"checked\":\"");
-				if (operates.contains("权限")) {
-					sb.append("true");
-				} else {
-					sb.append("false");
-				}
-				sb.append("\"}");
-
+				
 				sb.append("]");
 
 			} else {
@@ -298,13 +317,12 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 			}
 		}
 		sb.append("]");
-
+		System.out.println(sb.toString());
 		// 获取response对象
 		HttpServletResponse response = ServletActionContext.getResponse();
 		response.setContentType("application/json;charset=utf-8");
 		response.setHeader("Cache-control", "no-cache");
 		response.getWriter().write(sb.toString());
-		;
 
 		return NONE;
 	}
@@ -317,25 +335,27 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	 */
 	public String module() throws Exception {
 		Role role = roleService.get(Role.class, model.getId());
-		System.out.println("moduleIds:" + moduleIds);
+		// 每次保存前先删除之前的role关联的模块和操作
+		List<DictAndModule> list1 = dictModuleService.find("from DictAndModule where roleId = ?", DictAndModule.class, new String[]{model.getId()});
+		if (list1!=null && list1.size() > 0) {
+			for (DictAndModule dictAndModule : list1) {
+				dictModuleService.deleteById(DictAndModule.class, dictAndModule.getId());
+			}
+		}
 		List<String[]> sp = Encrypt.split(moduleIds);
+		// 打印一下获取的模块和操作数据是否正确
+		System.out.println("moduleIds:" + sp.toString());
 		StringBuilder sb = new StringBuilder();
 		for (String[] str : sp) {
+			// 拼接module的
 			sb.append(str[0]).append(",");
 			if (str.length > 1) {
 				for (int i = 0; i < str.length - 1; i++) {
 					DictAndModule dm = new DictAndModule();
 					dm.setRoleId(model.getId());
-					// 查询dictAndModule中是否存在与role相关的数据
-					/*List<DictAndModule> list = dictModuleService.find("from DictAndModule where roleId = ?", DictAndModule.class, new String[]{model.getId()});
-					for (DictAndModule rdm : list) {
-						if (rdm.getModuleId().equals(str[0])) {
-							
-						}
-					}*/
 					dm.setModuleId(str[0]);
 					dm.setDictId("operate" + str[i + 1]);
-					System.out.println("dm:" + dm.toString());
+					
 					dictModuleService.saveOrUpdate(dm);
 				}
 			}
@@ -354,3 +374,42 @@ public class RoleAction extends BaseAction implements ModelDriven<Role> {
 	}
 
 }
+/*if ("用户管理".equals(module.getName())) {
+sb.append("{\"id\":\"").append("operatef");
+sb.append("\",\"pId\":\"").append(module.getId());
+sb.append("\",\"name\":\"").append("角色");
+sb.append("\",\"checked\":\"");
+if (operates.contains("角色")) {
+	sb.append("true");
+} else {
+	sb.append("false");
+}
+sb.append("\"}");
+sb.append(",");
+
+} else if ("角色管理".equals(module.getName())) {
+sb.append("{\"id\":\"").append("operatee");
+sb.append("\",\"pId\":\"").append(module.getId());
+sb.append("\",\"name\":\"").append("权限");
+sb.append("\",\"checked\":\"");
+if (operates.contains("权限")) {
+	sb.append("true");
+} else {
+	sb.append("false");
+}
+sb.append("\"}");
+sb.append(",");
+}*/
+
+/*
+
+sb.append("{\"id\":\"").append("operatee");
+sb.append("\",\"pId\":\"").append(module.getId());
+sb.append("\",\"name\":\"").append("权限");
+sb.append("\",\"checked\":\"");
+if (operates.contains("权限")) {
+	sb.append("true");
+} else {
+	sb.append("false");
+}
+sb.append("\"}");*/

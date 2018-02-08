@@ -1,7 +1,7 @@
 <%@ page language="java" pageEncoding="UTF-8"%>
 <%@ include file="../../baselist.jsp"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>   
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title></title>
@@ -48,10 +48,18 @@
 <div id="innerMenubar">
   <div id="navMenubar">
 <ul>
+<shiro:hasPermission name="部门管理_查看">
 <li id="view"><a href="#" onclick="javascript:toView()">查看</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="部门管理_新增">
 <li id="new"><a href="#" onclick="formSubmit('deptAction_tocreate','_self');this.blur();">新增</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="部门管理_修改">
 <li id="update"><a href="#" onclick="javascript:toUpdate()">修改</a></li>
+</shiro:hasPermission>
+<shiro:hasPermission name="部门管理_删除">
 <li id="delete"><a href="#" onclick="formSubmit('deptAction_delete','_self');this.blur();">删除</a></li>
+</shiro:hasPermission>
 </ul>
   </div>
 </div>

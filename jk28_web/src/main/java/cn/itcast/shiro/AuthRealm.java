@@ -15,9 +15,13 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import cn.itcast.domain.DictAndModule;
+import cn.itcast.domain.Dictionary;
 import cn.itcast.domain.Module;
 import cn.itcast.domain.Role;
 import cn.itcast.domain.User;
+import cn.itcast.service.DictAndModuleService;
+import cn.itcast.service.DictService;
 import cn.itcast.service.UserService;
 
 
@@ -28,6 +32,15 @@ public class AuthRealm extends AuthorizingRealm{
 		this.userService = userService;
 	}
 	
+	private DictAndModuleService dictModuleService;
+	public void setDictModuleService(DictAndModuleService dictModuleService) {
+		this.dictModuleService = dictModuleService;
+	}
+	
+	private DictService dictService;
+	public void setDictService(DictService dictService) {
+		this.dictService = dictService;
+	}
 
 	//授权  当jsp页面出现shiro的标签时，才会加载授权这个方法
 	protected AuthorizationInfo doGetAuthorizationInfo(
@@ -42,9 +55,15 @@ public class AuthRealm extends AuthorizingRealm{
 			Set<Module> modules = role.getModules();
 			for (Module module : modules) {
 				list.add(module.getName());
+				// 把每个模块的操作权限一起赋权限给用户
+				List<DictAndModule> rdms = dictModuleService.find("from DictAndModule where roleId = ? and moduleId = ?", DictAndModule.class, new String[]{role.getId(), module.getId()});
+				for (DictAndModule rdm : rdms) {
+					Dictionary dict = dictService.get(Dictionary.class, rdm.getDictId());
+					list.add(module.getName()+"_"+dict.getName());
+				}
 			}
 		}
-		
+		//System.out.println(list);
 		SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 		info.addStringPermissions(list);
 		

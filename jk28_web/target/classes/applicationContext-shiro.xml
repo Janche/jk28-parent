@@ -28,7 +28,9 @@
 	
 	<!-- 自定义权限认证 -->
     <bean id="authRealm" class="cn.itcast.shiro.AuthRealm">
+   	 	<property name="dictService" ref="dictService"/>
 		<property name="userService" ref="userService"/>
+		<property name="dictModuleService" ref="dictAndModuleService"></property>
 		<!-- 自定义密码加密算法  -->
 		<property name="credentialsMatcher" ref="passwordMatcher"/>
 	</bean>

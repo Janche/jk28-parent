@@ -4,10 +4,14 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import cn.itcast.dao.BaseDao;
 import cn.itcast.domain.DictAndModule;
 import cn.itcast.service.DictAndModuleService;
 import cn.itcast.util.Page;
+
 
 public class DictAndModuleServiceImpl implements DictAndModuleService {
 

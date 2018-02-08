@@ -24,6 +24,7 @@ public class BaseDaoImpl implements BaseDao{
 	}
 	public Session getSession() {
 		return sessionFactory.getCurrentSession();
+		//return sessionFactory.openSession();
 	}
 
 	//带条件查询

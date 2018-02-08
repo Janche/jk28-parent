@@ -38,8 +38,11 @@ public class Encrypt {
 		StringBuilder sb = new StringBuilder();
 		List<String> list = new ArrayList<String>();
 		for (int i=0; i<split.length - 1;i++) {
-			if ("0123456789".contains(split[i])) {
+			if ("0123456789".contains(split[i]) && split[i].length()==1) {  
 				list.add(split[i]);
+			}else if(split[i].contains("0") && split[i+1].contains("0")) {
+				list.add(split[i].substring(0, 3));
+				split[i] = split[i].substring(3);
 			}else {
 				sb.append(split[i]);
 			}
