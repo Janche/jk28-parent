@@ -79,14 +79,6 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		this.roleService = roleService;
 	}
 	
-//	@Resource
-//	private DictAndModuleService dictModuleService;
-//	
-//	@Resource
-//	private ModuleService moduleService;
-//	
-//	@Resource
-//	private DictService dictService;
 	/**
 	 * 分页查询
 	 */
@@ -95,20 +87,6 @@ public class UserAction extends BaseAction implements ModelDriven<User> {
 		page = userService.findPage("from User", page, User.class, null);
 		// 设置分页的URL
 		page.setUrl("userAction_list");
-//		Set<Role> roles = model.getRoles();
-//		StringBuilder sb = new StringBuilder();
-//		System.out.println(roles.toString());
-//		for (Role role : roles) {
-//			List<Module> modules = moduleService.find("from Module where name = ?", Module.class, new String[]{"用户管理"});
-//			List<DictAndModule> list = dictModuleService.find("from DictAndModule where roleId = ? and moduleId = ?", DictAndModule.class, new String[]{role.getId(), modules.get(0).getId()});
-//			for (DictAndModule rdm : list) {
-//				Dictionary dict = dictService.get(Dictionary.class, rdm.getDictId());
-//				sb.append(dict.getName()).append(",");
-//			}
-//		}
-//		// 将封装有操作的数据压入值栈
-//		super.put("operate", sb.toString());
-		
 		// 将page对象压入栈顶
 		super.push(page);
 		return "list";

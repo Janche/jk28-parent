@@ -1,8 +1,9 @@
 package cn.itcast.action;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
+import com.opensymphony.xwork2.ActionContext;
 
-import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import cn.itcast.common.SysConstant;
+import cn.itcast.domain.User;
 
 /**
  * @Description:
@@ -25,8 +26,8 @@ public class HomeAction extends BaseAction{
 	
 	public String title(){
 		//获取session
-		//User curUser = (User)session.get(SysConstant.CURRENT_USER_INFO);
-		//ActionContext.getContext().getValueStack().push(curUser);
+		User curUser = (User)session.get(SysConstant.CURRENT_USER_INFO);
+		ActionContext.getContext().getValueStack().push(curUser);
 		return "title";
 	}
 

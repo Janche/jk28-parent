@@ -5,11 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import javax.mail.MessagingException;
+
 import cn.itcast.common.SysConstant;
 import cn.itcast.dao.BaseDao;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
 import cn.itcast.util.Encrypt;
+import cn.itcast.util.MailUtil;
 import cn.itcast.util.Page;
 import cn.itcast.util.UtilFuns;
 
@@ -39,18 +42,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void saveOrUpdate(User entity) {
+	public void saveOrUpdate (User entity) {
 		// 新增
 		if (UtilFuns.isEmpty(entity.getId())) {
 			String id = UUID.randomUUID().toString();
 			entity.setId(id);
 			entity.getUserinfo().setId(id);
+			// 补充shiro添加后的bug
+			entity.setPassword(Encrypt.md5(SysConstant.DEFAULT_PASS, entity.getUserName()));
+			
+			baseDao.saveOrUpdate(entity);  // 记录保存
+			
+			// 在开启一个新的县城完成邮件发送功能
+			Thread th = new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						MailUtil.sendMail(entity.getUserinfo().getEmail(), "新员工入职系统账户通知", "欢迎您加入本公司，您的用户名："+entity.getUserName()+",初始密码："+SysConstant.DEFAULT_PASS);
+					} catch (MessagingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+			});
+			
+			th.start();
+		}else {
+			// 修改
+			baseDao.saveOrUpdate(entity);
 		}
 		
-		// 补充shiro添加后的bug
-		entity.setPassword(Encrypt.md5(SysConstant.DEFAULT_PASS, entity.getUserName()));
-		
-		baseDao.saveOrUpdate(entity);
 	}
 
 	@Override
