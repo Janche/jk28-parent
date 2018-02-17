@@ -17,7 +17,6 @@ import cn.itcast.util.Page;
 import cn.itcast.util.UtilFuns;
 
 public class UserServiceImpl implements UserService {
-	
 	private BaseDao baseDao;
 	public void setBaseDao(BaseDao baseDao) {
 		this.baseDao = baseDao;

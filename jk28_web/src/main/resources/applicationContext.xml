@@ -17,10 +17,7 @@
 	 <!-- 自动扫描 -->
     <context:component-scan base-package="cn.itcast">
     </context:component-scan>
-    
    
-	
-	
 	<!--mysql的dataSource配置 1.dataSource-->
 	<!-- <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="driverClass" value="com.mysql.jdbc.Driver" />

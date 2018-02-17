@@ -8,9 +8,7 @@ import cn.itcast.dao.BaseDao;
 import cn.itcast.domain.Module;
 import cn.itcast.service.ModuleService;
 import cn.itcast.util.Page;
-
 public class ModuleServiceImpl implements ModuleService {
-	
 	private BaseDao baseDao;
 	public void setBaseDao(BaseDao baseDao) {
 		this.baseDao = baseDao;

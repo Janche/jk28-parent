@@ -18,7 +18,6 @@ public class Dictionary implements Serializable {
 	private String val;//取值
 	private Set<Module> modules = new HashSet<Module>(0); // 操作资源和模块  多对多
 	private Set<Role> roles = new HashSet<Role>(0);// 操作资源和角色  多对多
-	
 	public String getDid() {
 		return did;
 	}

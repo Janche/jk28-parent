@@ -11,7 +11,6 @@ import cn.itcast.util.Page;
 import cn.itcast.util.UtilFuns;
 
 public class DeptServiceImpl implements DeptService {
-	
 	private BaseDao baseDao;
 	public void setBaseDao(BaseDao baseDao) {
 		this.baseDao = baseDao;

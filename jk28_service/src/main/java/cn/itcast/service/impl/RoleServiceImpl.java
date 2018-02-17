@@ -8,9 +8,7 @@ import cn.itcast.dao.BaseDao;
 import cn.itcast.domain.Role;
 import cn.itcast.service.RoleService;
 import cn.itcast.util.Page;
-
 public class RoleServiceImpl implements RoleService {
-	
 	private BaseDao baseDao;
 	public void setBaseDao(BaseDao baseDao) {
 		this.baseDao = baseDao;

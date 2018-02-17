@@ -8,10 +8,8 @@ import cn.itcast.dao.BaseDao;
 import cn.itcast.domain.Dictionary;
 import cn.itcast.service.DictService;
 import cn.itcast.util.Page;
-import cn.itcast.util.UtilFuns;
 
 public class DictServiceImpl implements DictService {
-
 	private BaseDao baseDao;
 
 	public void setBaseDao(BaseDao baseDao) {

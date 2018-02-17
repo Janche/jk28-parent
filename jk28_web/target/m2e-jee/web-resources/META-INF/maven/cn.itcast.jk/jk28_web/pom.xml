@@ -36,7 +36,11 @@
 			<version>1.2.3</version>
 		</dependency>
 	</dependencies>
+	<properties>
+		<webVersion>3.1</webVersion>
+	</properties>
 	<build>
 		<finalName>jk28_web</finalName>
 	</build>
+
 </project>

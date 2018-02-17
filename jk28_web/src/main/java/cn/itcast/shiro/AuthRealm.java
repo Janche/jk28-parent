@@ -14,6 +14,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.transaction.annotation.Transactional;
 
 import cn.itcast.domain.DictAndModule;
 import cn.itcast.domain.Dictionary;
@@ -24,25 +25,24 @@ import cn.itcast.service.DictAndModuleService;
 import cn.itcast.service.DictService;
 import cn.itcast.service.UserService;
 
-
 public class AuthRealm extends AuthorizingRealm{
 	private static Logger log = Logger.getLogger(AuthRealm.class);
-	UserService userService;
+	
+	private UserService userService;
 	public void setUserService(UserService userService) {
 		this.userService = userService;
 	}
-	
 	private DictAndModuleService dictModuleService;
 	public void setDictModuleService(DictAndModuleService dictModuleService) {
 		this.dictModuleService = dictModuleService;
 	}
-	
 	private DictService dictService;
 	public void setDictService(DictService dictService) {
 		this.dictService = dictService;
 	}
 
 	//授权  当jsp页面出现shiro的标签时，才会加载授权这个方法
+	@Transactional
 	protected AuthorizationInfo doGetAuthorizationInfo(
 			PrincipalCollection principals) {
 		log.info("执行授权...");
