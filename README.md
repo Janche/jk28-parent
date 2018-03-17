@@ -23,4 +23,6 @@
      ehcache-shiro.xml
      hibernate.cfg.xml
      struts.xml
+     
+     SpringMVC（注解）重构版地址：https://github.com/Janche/jk-parent.git
   
